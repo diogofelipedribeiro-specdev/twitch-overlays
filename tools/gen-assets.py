@@ -119,6 +119,18 @@ thumb_body = """<rect x="0" y="0" width="1280" height="720" fill="#e1ecd6"></rec
 <text x="64" y="690" font-family="Bungee, Impact, sans-serif" font-size="40" fill="#ffffff">daretoreact</text>"""
 write("assets/svg/thumbnail-1280x720.svg", svg_file("0 0 1280 720", thumb_body, 1280, 720, fonts=True, title="Thumbnail template 1280×720"))
 
+# ---- capa padrão do map cover (lol/cover-default.svg), 1000×1000 ----
+cover_body = """<rect width="1000" height="1000" fill="#e1ecd6"/>
+<path d="M520 0 L1000 0 L1000 1000 L340 1000 Z" fill="#16c1c8"/>
+<path d="M520 0 L560 0 L380 1000 L340 1000 Z" fill="#aee1d3"/>
+<circle cx="820" cy="170" r="90" fill="#aee1d3" stroke="#123c3f" stroke-width="8"/>
+<path d="M0 860 L1000 860 L1000 1000 L0 1000 Z" fill="#49cccc" stroke="#123c3f" stroke-width="7"/>
+<path d="M40 905 C110 895 170 919 240 909 C310 899 370 923 440 913" fill="none" stroke="#7cd7cf" stroke-width="9" stroke-linecap="round"/>
+<path d="M620 915 C690 905 750 927 820 917 C890 907 950 927 1010 919" fill="none" stroke="#7cd7cf" stroke-width="9" stroke-linecap="round"/>
+<g transform="translate(700 560) scale(0.95)"><use href="#palm"/></g>
+<g transform="translate(60 160) scale(1.45)"><use href="#nj-bust"/></g>"""
+write("lol/cover-default.svg", svg_file("0 0 1000 1000", cover_body, 1000, 1000, fonts=True, title="Capa padrão do map cover (LoL) 1000×1000"))
+
 # ---- sprites.js (defs inline para os overlays) ----
 sprite_svg = (
     '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">'

@@ -26,7 +26,8 @@ CSS_PATTERNS = [
 ]
 # em JS só consideramos strings que parecem caminho de arquivo com extensão conhecida
 JS_PATTERNS = [
-    re.compile(r'["\']((?:\.{1,2}/)?[\w\-./]+\.(?:html|css|js|svg|png|webp|json|woff2?))(?:[?#][^"\']*)?["\']', re.I),
+    # (começa com ./ ../ ou nome de arquivo; ignora caminhos absolutos "/x" e sufixos de URL de CDN)
+    re.compile(r'["\']((?:\.{1,2}/)?[\w\-][\w\-./]*\.(?:html|css|js|svg|png|webp|json|woff2?))(?:[?#][^"\']*)?["\']', re.I),
 ]
 EXTERNAL = re.compile(r'^(?:[a-z][a-z0-9+.-]*:|//|#|\{\{|\$\{)', re.I)
 

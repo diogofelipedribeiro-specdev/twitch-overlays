@@ -15,8 +15,14 @@
       ?nome=daretoreact      nome exibido no rodapé
       ?tema=dark             chat em modo escuro (padrão: claro)
       ?chat=0                esconde o chat
+      ?chat=iframe           usa o embed oficial da Twitch (iframe) em vez do chat customizado
+      ?size=22 ?max=30       tamanho do texto e nº de mensagens do chat customizado
+      ?demo=1                mensagens falsas no chat (para ajustar o visual)
+    O chat customizado (padrão) lê o IRC da Twitch em modo anônimo — sem token —
+    e mostra emotes da Twitch, BTTV, FFZ e 7TV (shared/twitch-chat.js).
   -->
   <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../chat/style.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -80,6 +86,7 @@
   <script src="../shared/config.js"></script>
   <script src="../shared/utils.js"></script>
   <script src="../shared/sprites.js"></script>
+  <script src="../shared/twitch-chat.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

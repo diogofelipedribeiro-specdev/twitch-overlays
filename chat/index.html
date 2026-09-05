@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat · ninja praiano</title>
+  <!--
+    WIDGET DE CHAT CUSTOMIZADO (somente leitura, sem token)
+    Browser Source recomendado: 500 × 800, fundo transparente.
+    Conecta no IRC da Twitch em modo anônimo e mostra as mensagens no estilo
+    da identidade, com emotes da Twitch, BTTV, FFZ e 7TV.
+
+    Parâmetros:
+      ?canal=login       canal (padrão: TWITCH_CHANNEL em shared/config.js)
+      ?tema=dark         bolhas escuras (padrão: claras)
+      ?size=22           tamanho do texto em px
+      ?max=40            quantidade máxima de mensagens na tela
+      ?fade=30           segundos até cada mensagem sumir (0 = nunca; bom para gameplay)
+      ?frame=1           desenha a moldura com cabeçalho "chat"
+      ?emotes3p=0        desliga BTTV/FFZ/7TV
+      ?demo=1            mostra mensagens falsas para ajustar o visual
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body { width: 100%; height: 100%; background: transparent; }
+    #chat { position: absolute; inset: 0; }
+    body.framed #chat { position: static; }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="chat"></div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="../shared/twitch-chat.js"></script>
+  <script>
+    (function () {
+      var N = window.Ninja;
+      var chatEl = document.getElementById('chat');
+
+      // moldura opcional
+      if (N.qsBool('frame', false)) {
+        document.body.classList.add('framed');
+        var frame = document.createElement('div'); frame.className = 'nchat-frame';
+        frame.innerHTML = '<div class="nchat-frame-head"><svg viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg><span>chat</span></div>';
+        chatEl.parentNode.insertBefore(frame, chatEl); frame.appendChild(chatEl);
+      }
+
+      chatEl.style.setProperty('--nchat-size', parseInt(N.qs('size', '22'), 10) + 'px');
+
+      var chat = window.NinjaChat.mount(chatEl, {
+        channel: N.qsBool('demo', false) ? '' : N.setting('canal', 'TWITCH_CHANNEL', ''),
+        theme: N.qs('tema', 'light'),
+        max: parseInt(N.qs('max', '40'), 10),
+        fade: parseFloat(N.qs('fade', '0')),
+        emotes3p: N.qsBool('emotes3p', true),
+        onStatus: function (m) { console.log('[chat] ' + m); },
+      });
+
+      // mensagens falsas para ajustar o visual
+      if (N.qsBool('demo', false)) {
+        var fakes = [
+          ['coco_gelado', 'boa live! 🌴', { badges: 'subscriber/3' }],
+          ['surfista_ninja', 'esse tutorial de ninjutsu é impagável', { badges: 'moderator/1', color: '#1E90FF' }],
+          ['maria_da_praia', 'cheguei agora, o que já rolou?', { color: '#FFFF00' }],
+          ['daretoreact', 'sejam bem-vindos, pega uma água de coco', { badges: 'broadcaster/1', color: '#16c1c8' }],
+          ['brisa_do_mar', 'GG GG GG', { badges: 'vip/1' }],
+        ];
+        var i = 0;
+        setInterval(function () { var f = fakes[i++ % fakes.length]; chat.addFake(f[0], f[1], f[2]); }, 1800);
+      }
+    })();
+  </script>
+</body>
+</html>

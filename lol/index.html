@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cena LoL · map cover · ninja praiano</title>
+  <!--
+    CENA LEAGUE OF LEGENDS — HUD + MAP COVER
+    Browser Source 1920 × 1080, fundo transparente (só o cover e o HUD são pintados).
+
+    O map cover esconde o minimapa com uma arte da identidade, deixando RECORTES
+    (transparentes) sobre: Baron, Dragão, escutas (scuttles), buffs azul/vermelho,
+    camps pequenos, arbustos de ward e faixas das rotas (para os ícones dos laners).
+    Cada grupo pode ser ligado/desligado.
+
+    CONFIGURAÇÃO: abra com ?setup=1 (num navegador normal ou pelo "Interagir" do OBS).
+      - Calibre tamanho/posição do minimapa com a guia tracejada ligada.
+      - Envie sua própria imagem de capa (fica salva neste navegador/OBS) ou use ?img=URL.
+      - "Copiar URL" gera um link com todos os ajustes (menos a imagem enviada por arquivo).
+    Tudo fica salvo no localStorage; os parâmetros da URL têm prioridade.
+
+    Parâmetros principais (todos opcionais):
+      ?size=300 ?x=1620 ?y=780      tamanho e canto superior esquerdo do minimapa (px)
+      ?r=22 ?lane=46                raio dos recortes e largura das rotas (em 1/1000 do mapa)
+      ?img=../assets/minha-capa.png imagem da capa (URL)  ?fit=cover|contain  ?op=1
+      ?groups=baron,dragon,...      grupos de recortes ativos
+      ?anim=0                       desliga as animações do cover   ?hud=0 esconde o nome do canal
+      ?guide=1                      mostra a guia de calibração
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../overlay-gameplay/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== HUD (mesmo badge do overlay de gameplay, canto superior esquerdo) ===== -->
+  <div class="hud no-cam" id="hud" data-pos="tl">
+    <div class="badge card" id="badge">
+      <svg class="badge-emote" viewBox="100 34 200 200"><use href="#emote-gg"/></svg>
+      <div class="badge-text">
+        <div class="brand badge-name" id="nome">daretoreact</div>
+        <div class="badge-social" id="social"></div>
+      </div>
+      <span class="badge-live"></span>
+    </div>
+  </div>
+
+  <!-- ===== MAP COVER ===== -->
+  <div class="cover" id="cover">
+    <svg class="cover-svg" id="coverSvg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+      <defs>
+        <!-- máscara: branco = coberto, preto = recorte transparente -->
+        <mask id="coverMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
+          <rect width="1000" height="1000" fill="#fff"/>
+          <g id="maskCuts"></g>
+        </mask>
+        <clipPath id="coverClip"><rect width="1000" height="1000" rx="28"/></clipPath>
+        <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+          <stop offset="1" stop-color="#fff" stop-opacity=".55"/>
+        </linearGradient>
+      </defs>
+
+      <g clip-path="url(#coverClip)">
+        <!-- arte da capa (imagem do usuário ou padrão) -->
+        <image id="coverImg" href="" x="0" y="0" width="1000" height="1000" preserveAspectRatio="xMidYMid slice" mask="url(#coverMask)"/>
+        <!-- varredura de radar (animação) -->
+        <g class="radar" id="radar" mask="url(#coverMask)">
+          <rect x="-1000" y="0" width="1000" height="1000" fill="url(#radarGrad)"/>
+        </g>
+        <!-- espuma animada na borda de cima -->
+        <g class="foam" id="foam" mask="url(#coverMask)">
+          <path d="M-100 40 C-40 20 20 60 80 40 C140 20 200 60 260 40 C320 20 380 60 440 40 C500 20 560 60 620 40 C680 20 740 60 800 40 C860 20 920 60 980 40 C1040 20 1100 60 1160 40" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+        </g>
+      </g>
+
+      <!-- anéis decorativos ao redor dos recortes -->
+      <g id="rings" class="rings"></g>
+      <!-- moldura -->
+      <rect class="cover-frame" x="4" y="4" width="992" height="992" rx="28"/>
+    </svg>
+
+    <!-- mascote espiando por cima do cover -->
+    <svg class="peek" id="peek" viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg>
+    <!-- pílula AO VIVO no cover -->
+    <div class="pill pill--live cover-live" id="coverLive"><span class="dot"></span><span>ao vivo</span></div>
+    <!-- guia de calibração -->
+    <div class="guide" id="guide"><span>minimapa</span></div>
+  </div>
+
+  <!-- ===== PAINEL (?setup=1) ===== -->
+  <div class="panel only-test" id="panel">
+    <div class="p-title">Map cover · configuração</div>
+
+    <div class="p-sec">Minimapa (calibre com a guia ligada)</div>
+    <label class="p-row"><span>tamanho</span><input type="range" id="size" min="150" max="600" step="1"><output id="sizeOut"></output></label>
+    <label class="p-row"><span>x</span><input type="range" id="x" min="0" max="1920" step="1"><output id="xOut"></output></label>
+    <label class="p-row"><span>y</span><input type="range" id="y" min="0" max="1080" step="1"><output id="yOut"></output></label>
+    <label class="p-row"><input type="checkbox" id="guideChk"> mostrar guia tracejada</label>
+
+    <div class="p-sec">Recortes</div>
+    <div class="p-groups" id="groups"></div>
+    <label class="p-row"><span>raio</span><input type="range" id="r" min="8" max="60" step="1"><output id="rOut"></output></label>
+    <label class="p-row"><span>rotas</span><input type="range" id="lane" min="16" max="120" step="1"><output id="laneOut"></output></label>
+
+    <div class="p-sec">Capa</div>
+    <label class="p-row"><span>imagem</span><input type="file" id="file" accept="image/*"></label>
+    <label class="p-row"><span>ou URL</span><input type="text" id="imgUrl" placeholder="../assets/minha-capa.png"></label>
+    <label class="p-row"><span>ajuste</span><select id="fit"><option value="cover">preencher (cover)</option><option value="contain">caber (contain)</option></select></label>
+    <label class="p-row"><span>opacidade</span><input type="range" id="op" min="0.3" max="1" step="0.05"><output id="opOut"></output></label>
+    <label class="p-row"><input type="checkbox" id="anim"> animações (radar, anéis, mascote, espuma)</label>
+    <label class="p-row"><input type="checkbox" id="live"> pílula AO VIVO no cover</label>
+    <label class="p-row"><input type="checkbox" id="hudChk"> nome do canal (HUD)</label>
+
+    <div class="p-row p-actions">
+      <button id="copy">Copiar URL</button>
+      <button id="clearImg" class="secondary">Remover imagem</button>
+      <button id="reset" class="secondary">Restaurar padrão</button>
+    </div>
+    <div class="p-status" id="status"></div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

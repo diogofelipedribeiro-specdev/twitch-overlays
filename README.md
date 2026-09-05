@@ -10,6 +10,9 @@ A identidade visual (mascote ninja praiano, banner, emotes, thumbnail, paleta e 
 ├── overlay-gameplay/       HUD de gameplay (com e sem câmera)
 ├── alerts/                 alertas follow / sub / bits (+ Twitch EventSub)
 ├── now-playing/            widget Spotify (PKCE)
+├── chat/                   chat customizado (widget isolado; motor em shared/twitch-chat.js)
+├── transition/             transição entre cenas (onda + mascote)
+├── lol/                    cena de League of Legends com map cover
 ├── assets/
 │   ├── svg/                mascote, palmeira, banner 1200×480, thumbnail 1280×720
 │   ├── emotes/             risada, hype, gg, to-de-boa, em-extase
@@ -19,7 +22,8 @@ A identidade visual (mascote ninja praiano, banner, emotes, thumbnail, paleta e 
     ├── theme.css           TEMA CENTRAL: cores e fontes (CSS variables)
     ├── config.js           placeholders: canal, Client IDs, textos dos alertas
     ├── sprites.js          injeta os desenhos do mascote em qualquer página
-    └── utils.js            querystring, template {name}, fonte dinâmica, PKCE
+    ├── utils.js            querystring, template {name}, fonte dinâmica, PKCE
+    └── twitch-chat.js      IRC anônimo da Twitch + emotes BTTV/FFZ/7TV
 ```
 
 ---
@@ -114,7 +118,7 @@ Todos os valores podem ser sobrescritos pela URL (`?canal=`, `?nome=`, `?client_
 
 Browser Source **1920 × 1080**. Usa a composição do template de thumbnail como fundo (faixa diagonal, sol, areia, palmeira e mascote), com a pílula **AO VIVO** e, abaixo dela, o **chat da Twitch** dentro de uma moldura no estilo da identidade.
 
-O chat usa o embed oficial:
+Por padrão o chat é o **customizado** (seção 4.5): bolhas, emotes e selos com a identidade, sem token. Com `?chat=iframe` a cena volta ao embed oficial da Twitch:
 
 ```
 https://www.twitch.tv/embed/SEUCANAL/chat?parent=diogofelipedribeiro-specdev.github.io
@@ -124,7 +128,7 @@ https://www.twitch.tv/embed/SEUCANAL/chat?parent=diogofelipedribeiro-specdev.git
 - `parent` → **deve ser o domínio que hospeda a página**. É detectado automaticamente (`diogofelipedribeiro-specdev.github.io` no Pages, `localhost` em teste). Force com `CHAT_PARENT` ou `?parent=` se necessário.
 - O conteúdo interno do iframe não é estilizável (regra da Twitch); a moldura sim. `?tema=dark` ativa o modo escuro do chat.
 
-Parâmetros: `?titulo=`, `?sub=`, `?nome=`, `?tema=dark`, `?chat=0`.
+Parâmetros: `?titulo=`, `?sub=`, `?nome=`, `?tema=dark`, `?chat=0`, `?chat=iframe`, `?size=`, `?max=`, `?demo=1`.
 
 ### 4.2 HUD de gameplay — `overlay-gameplay/`
 
@@ -172,6 +176,42 @@ Browser Source **560 × 160**, transparente. Mostra capa, música, artista e bar
 Parâmetros: `?setup=1`, `?autohide=1`, `?compact=1`, `?tema=dark`, `?demo=1`.
 
 ---
+
+### 4.5 Chat customizado — `chat/index.html` (e dentro da cena inicial)
+
+A cena inicial agora usa um chat **customizado** no lugar do iframe genérico: `shared/twitch-chat.js` conecta no IRC da Twitch por WebSocket em modo **anônimo** (sem token, somente leitura) e renderiza as mensagens com a identidade: bolhas com contorno, nome na cor do usuário (ajustada para contraste), selos de dono/mod/vip/sub, animação de entrada e emotes da **Twitch, BTTV, FFZ e 7TV** (globais e do canal, via APIs públicas sem chave). Trata `CLEARCHAT`/`CLEARMSG` (mensagens apagadas somem), `USERNOTICE` (sub, resub, raid viram avisos destacados) e reconecta sozinho.
+
+`chat/index.html` é o mesmo chat como widget isolado (Browser Source **500 × 800**, transparente) para usar em qualquer cena.
+
+Parâmetros: `?canal=`, `?tema=dark`, `?size=22`, `?max=40`, `?fade=30` (mensagens somem após N s, bom em gameplay), `?frame=1` (moldura), `?emotes3p=0`, `?demo=1`. Na cena inicial, `?chat=iframe` volta ao embed oficial da Twitch e `?chat=0` esconde o chat.
+
+### 4.6 Transição entre cenas — `transition/index.html`
+
+Browser Source **1920 × 1080**, transparente. Uma onda diagonal nas cores da identidade varre a tela, o mascote aparece no centro e tudo sai pelo outro lado. Duração padrão de 1,6 s, ajustável.
+
+Como o OBS só aceita vídeo como transição nativa, o overlay funciona assim:
+
+1. Adicione a página como fonte de navegador em **cada cena** (clique com o botão direito na fonte → Copiar → Colar (referência) nas outras cenas).
+2. Nas propriedades da fonte, marque **"Atualizar navegador quando a cena ficar ativa"**. A animação toca toda vez que a cena entra.
+3. Deixe a fonte no topo da lista de fontes.
+
+Ela também reage ao evento `obsSceneChanged` do OBS quando a fonte é compartilhada. Parâmetros: `?dur=1600`, `?texto=Gameplay`, `?dir=rl`, `?emote=hype`, `?full=1` (corpo inteiro), `?loop=1` (pré-visualização).
+
+### 4.7 Cena League of Legends com map cover — `lol/index.html`
+
+Browser Source **1920 × 1080**, transparente. Reúne o nome do canal (mesmo badge do HUD) e um **map cover**: uma arte da identidade cobre o minimapa deixando **recortes** transparentes sobre o que você quer continuar vendo. Reproduz a função da ferramenta lea.gy/map-cover-creator com o visual da stream.
+
+Grupos de recortes (cada um liga/desliga): Baron, Dragão, escutas, buffs azul/vermelho, camps pequenos, arbustos de ward e faixas das rotas top/mid/bot (para os ícones dos laners). As posições vêm das coordenadas do Summoner's Rift normalizadas para o quadrado do minimapa.
+
+Animações ligadas à live (`?anim=0` desliga): varredura de radar sobre a capa, anéis dos recortes pulsando como wards, espuma na borda de cima, mascote espiando por cima do cover de tempos em tempos e pílula AO VIVO.
+
+**Configuração** (`lol/index.html?setup=1`, num navegador normal ou pelo botão "Interagir" do OBS):
+
+- Ligue a **guia tracejada** e ajuste tamanho/posição até cobrir exatamente o minimapa do jogo. O padrão (300 px em 1620, 780) é uma aproximação para escala padrão em 1080p no canto inferior direito.
+- **Imagem própria**: botão de arquivo (fica salva no armazenamento do navegador/OBS onde foi enviada, até 4 MB) ou campo de URL / `?img=` para uma imagem no repositório (ex.: `../assets/minha-capa.png`). "Remover imagem" volta para `lol/cover-default.svg`, gerado do design original.
+- **Copiar URL** gera o link com todos os ajustes (tamanho, posição, raio, rotas, grupos, opacidade). A imagem enviada por arquivo não vai na URL; para usá-la no OBS, envie pelo "Interagir" ou hospede em `assets/` e use `?img=`.
+
+Todos os ajustes ficam em `localStorage`; os parâmetros da URL têm prioridade.
 
 ## 5. Spotify — registro do app e login (PKCE)
 

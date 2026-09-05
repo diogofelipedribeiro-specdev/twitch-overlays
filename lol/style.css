@@ -1,0 +1,114 @@
+/* ============================================================
+   lol/style.css — cena de League of Legends (HUD + map cover)
+   Cores/fontes: ../shared/theme.css · badge: ../overlay-gameplay/style.css
+   ============================================================ */
+html, body { width: 100%; height: 100%; background: transparent; }
+
+.hud.hidden { display: none; }
+
+/* ---------- cover ---------- */
+.cover {
+  position: absolute;
+  /* posição/tamanho definidos pelo script via --size/--x/--y */
+  left: var(--x, 1620px); top: var(--y, 780px);
+  width: var(--size, 300px); height: var(--size, 300px);
+  --cover-op: 1;
+}
+.cover-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#coverImg { opacity: var(--cover-op); }
+.cover-frame { fill: none; stroke: var(--c-ink); stroke-width: 8; }
+.cover-frame + * { }
+
+/* anéis ao redor dos recortes: "wards" pulsando */
+.rings circle, .rings path { fill: none; stroke: var(--c-primary); stroke-width: 8; }
+.rings .ring-outer { stroke: var(--c-ink); stroke-width: 16; }
+.rings .sonar { stroke: var(--c-sand); stroke-width: 4; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.cover.anim .rings .pulse { animation: ward-pulse calc(var(--anim-idle) * 1.2) ease-in-out infinite; }
+.cover.anim .rings .sonar { animation: ward-sonar calc(var(--anim-idle) * 1.6) ease-out infinite; }
+@keyframes ward-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+@keyframes ward-sonar {
+  0%   { opacity: .8; transform: scale(1); }
+  60%  { opacity: 0;  transform: scale(2.2); }
+  100% { opacity: 0;  transform: scale(2.2); }
+}
+
+/* varredura de radar: uma faixa clara atravessa o cover a cada ciclo */
+.radar { opacity: 0; }
+.cover.anim .radar { animation: radar-sweep calc(var(--anim-slow) * 1.5) linear infinite; }
+@keyframes radar-sweep {
+  0%   { opacity: 0; transform: translateX(0); }
+  5%   { opacity: 1; }
+  40%  { opacity: 1; transform: translateX(2000px); }
+  41%, 100% { opacity: 0; transform: translateX(2000px); }
+}
+
+/* espuma na borda de cima do cover */
+.foam { opacity: 0; }
+.cover.anim .foam { opacity: 1; animation: foam-move calc(var(--anim-slow) * 1.4) ease-in-out infinite; }
+@keyframes foam-move { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-60px, 6px); } }
+
+/* mascote espiando por cima do cover de vez em quando */
+.peek {
+  position: absolute; left: 12%; top: -1px;
+  width: 34%; height: 34%;
+  transform: translateY(20%) scale(.6); opacity: 0;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 4px 0 rgba(18,60,63,.35));
+  pointer-events: none;
+}
+.cover.anim .peek { animation: peek calc(var(--anim-slow) * 3) ease-in-out infinite; }
+@keyframes peek {
+  0%, 70%  { transform: translateY(20%) scale(.6); opacity: 0; }
+  76%      { transform: translateY(-62%) scale(1) rotate(-6deg); opacity: 1; }
+  80%      { transform: translateY(-58%) scale(1) rotate(4deg); opacity: 1; }
+  88%      { transform: translateY(-60%) scale(1) rotate(-2deg); opacity: 1; }
+  94%, 100%{ transform: translateY(20%) scale(.6); opacity: 0; }
+}
+
+/* pílula ao vivo encostada na borda de cima */
+.cover-live {
+  position: absolute; right: -6px; top: -22px;
+  font-size: 12px; padding: 7px 12px; border-width: 4px;
+  transform: rotate(3deg);
+}
+.cover-live.hidden { display: none; }
+
+/* guia de calibração (tracejado sobre a área do minimapa) */
+.guide {
+  position: absolute; inset: 0; display: none;
+  border: 3px dashed var(--c-coral); box-sizing: border-box;
+  font-family: var(--font-panel); font-weight: 700; font-size: 12px; color: var(--c-coral);
+}
+.guide span { position: absolute; left: 6px; top: 4px; background: rgba(255,255,255,.8); padding: 1px 6px; border-radius: 6px; }
+.cover.guide-on .guide { display: block; }
+.cover.guide-on #coverImg { opacity: .35; }
+
+/* ---------- painel ---------- */
+.panel {
+  position: fixed; left: 20px; top: 110px; z-index: 10;
+  width: 380px; max-height: calc(100vh - 130px); overflow: auto;
+  padding: 14px 16px; background: var(--c-white); border: 4px solid var(--c-ink); border-radius: 16px;
+  box-shadow: 0 6px 0 var(--c-ink); font-family: var(--font-panel); font-size: 13px; color: var(--c-ink);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.p-title { font-family: var(--font-impact); font-size: 16px; }
+.p-sec { font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--c-primary-dark); margin-top: 6px; }
+.p-row { display: flex; align-items: center; gap: 8px; }
+.p-row > span { width: 72px; flex: none; color: var(--c-muted); font-weight: 600; }
+.p-row input[type=range] { flex: 1; accent-color: var(--c-primary); }
+.p-row input[type=text], .p-row select { flex: 1; font: 600 12px var(--font-panel); border: 3px solid var(--c-ink); border-radius: 8px; padding: 4px 6px; min-width: 0; }
+.p-row output { width: 44px; text-align: right; font-weight: 700; }
+.p-groups { display: flex; flex-wrap: wrap; gap: 6px; }
+.p-groups label {
+  font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  border: 3px solid var(--c-ink); background: var(--c-sand);
+}
+.p-groups label.on { background: var(--c-primary); color: var(--c-white); }
+.p-groups input { display: none; }
+.p-actions { flex-wrap: wrap; }
+.panel button {
+  font: 600 13px var(--font-panel); cursor: pointer; padding: 7px 12px; border-radius: 999px;
+  background: var(--c-primary); color: var(--c-white); border: 3px solid var(--c-ink); box-shadow: 0 3px 0 var(--c-ink);
+}
+.panel button.secondary { background: var(--c-sand); color: var(--c-ink); }
+.p-status { font-size: 12px; color: var(--c-muted); word-break: break-all; }
