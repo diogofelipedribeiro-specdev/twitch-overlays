@@ -9,7 +9,7 @@ Saída:
 """
 import re, io, os, sys
 
-ROOT = r"C:\Users\Diogo\Downloads\ninja-praiano-twitch-overlays"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "assets", "source", "ninja-praiano-design-original.html")
 
 html = io.open(SRC, encoding="utf-8").read()
