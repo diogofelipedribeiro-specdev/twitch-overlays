@@ -187,15 +187,17 @@ Parâmetros: `?canal=`, `?tema=dark`, `?size=22`, `?max=40`, `?fade=30` (mensage
 
 ### 4.6 Transição entre cenas — `transition/index.html`
 
-Browser Source **1920 × 1080**, transparente. Uma onda diagonal nas cores da identidade varre a tela, o mascote aparece no centro e tudo sai pelo outro lado. Duração padrão de 1,6 s, ajustável.
+Browser Source **1920 × 1080**, transparente. Uma onda diagonal nas cores da identidade cobre a tela com o mascote no centro e depois sai, **revelando** a cena nova. Duração padrão de 1,4 s.
 
-Como o OBS só aceita vídeo como transição nativa, o overlay funciona assim:
+Por que "revelar": uma fonte de navegador só existe dentro da cena de destino, então a metade "entrada" de uma animação nunca conseguiria esconder a troca (a cena nova já estaria no ar enquanto a onda chegasse). Por isso a página **nasce coberta**, via classe no HTML e sem depender de JavaScript: no instante da troca o que aparece é a onda, e então ela sai. `?mode=full` toca entrada + saída, útil para pré-visualizar.
 
-1. Adicione a página como fonte de navegador em **cada cena** (clique com o botão direito na fonte → Copiar → Colar (referência) nas outras cenas).
-2. Nas propriedades da fonte, marque **"Atualizar navegador quando a cena ficar ativa"**. A animação toca toda vez que a cena entra.
-3. Deixe a fonte no topo da lista de fontes.
+Configuração no OBS:
 
-A página também escuta os eventos do próprio OBS (`obsstudio.onVisibilityChange`, `onActiveChange` e `obsSceneChanged`), então toca ao entrar na cena mesmo sem essas caixas marcadas. Elas ficam no fim da janela de propriedades, abaixo do campo "CSS personalizado" (role a janela). Parâmetros: `?dur=1600`, `?texto=Gameplay`, `?dir=rl`, `?emote=hype`, `?full=1` (corpo inteiro), `?loop=1` (pré-visualização).
+1. Adicione a página como fonte de navegador em **cada cena** (botão direito na fonte → Copiar → Colar (referência) nas outras) e deixe-a no **topo** da lista.
+2. Deixe **desmarcadas** as caixas "Desligar a fonte quando não estiver visível" e "Atualizar o navegador quando a cena se tornar ativa" (ficam no fim da janela de propriedades, abaixo de "CSS personalizado"). Assim a página fica carregada e toca na hora pelos eventos de visibilidade do OBS (`obsstudio.onVisibilityChange`, `onActiveChange`, `obsSceneChanged`), sem o atraso de recarregar.
+3. Em **Transições de cena**, use **Cortar** com 0 ms; um "Esmaecer" do OBS se sobreporia à onda.
+
+Parâmetros: `?mode=full`, `?dur=1400`, `?texto=Gameplay`, `?dir=rl`, `?emote=hype`, `?full=1` (corpo inteiro), `?loop=1` (pré-visualização).
 
 ### 4.7 Cena League of Legends com map cover — `lol/index.html`
 

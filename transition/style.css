@@ -6,8 +6,34 @@
 html, body { width: 100%; height: 100%; background: transparent; }
 
 .tr { position: absolute; inset: 0; overflow: hidden; --tr-dur: 1.6s; visibility: hidden; }
-.tr.play { visibility: visible; }
+.tr.play, .tr.covered, .tr.play-out { visibility: visible; }
 .tr.done { visibility: hidden; }
+
+/* ---------- modo "revelar" (padrão) ----------
+   A página já nasce COBERTA (classe no HTML, sem depender de JS): no instante
+   em que a cena entra no OBS, a onda e o mascote já estão na tela. Depois a
+   onda sai e revela a cena nova. É o que esconde a troca de cena. */
+.tr.covered .tr-wave { transform: translateX(0) skewX(-12deg); }
+.tr.rl.covered .tr-wave { transform: translateX(0) skewX(12deg); }
+.tr.covered .tr-center { opacity: 1; transform: none; }
+
+.tr.play-out .tr-wave--a { animation: sweep-out var(--tr-dur) cubic-bezier(.7, 0, .3, 1) both; }
+.tr.play-out .tr-wave--b { animation: sweep-out var(--tr-dur) cubic-bezier(.7, 0, .3, 1) both; animation-delay: calc(var(--tr-dur) * .07); }
+@keyframes sweep-out {
+  0%, 30% { transform: translateX(0) skewX(-12deg); }
+  100%    { transform: translateX(140%) skewX(-12deg); }
+}
+.tr.rl.play-out .tr-wave--a, .tr.rl.play-out .tr-wave--b { animation-name: sweep-out-rl; }
+@keyframes sweep-out-rl {
+  0%, 30% { transform: translateX(0) skewX(12deg); }
+  100%    { transform: translateX(-140%) skewX(12deg); }
+}
+.tr.play-out .tr-center { animation: pop-out var(--tr-dur) var(--ease-out) both; }
+@keyframes pop-out {
+  0%, 18%   { opacity: 1; transform: none; }
+  24%       { opacity: 1; transform: scale(1.06) rotate(-3deg); }
+  45%, 100% { opacity: 0; transform: scale(.5) rotate(8deg); }
+}
 
 /* ---------- ondas ---------- */
 .tr-wave {

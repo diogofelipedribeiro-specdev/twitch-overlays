@@ -7,19 +7,24 @@
   <!--
     TRANSIÇÃO ENTRE CENAS (overlay)
     Browser Source 1920 × 1080, fundo transparente.
-    Uma onda diagonal nas cores da identidade varre a tela, o mascote aparece
-    no centro e tudo sai pelo outro lado. Duração padrão: 1,6 s.
+    MODO PADRÃO ("revelar"): a página já nasce coberta pela onda e pelo mascote;
+    quando a cena entra no OBS, a onda sai e REVELA a cena nova. Isso esconde
+    a troca de cena (uma fonte só existe na cena de destino, então a metade
+    "entrada" de uma animação nunca conseguiria cobrir a troca).
+    ?mode=full toca entrada + saída (bom para pré-visualizar).
 
     Como usar no OBS:
       1. Adicione esta página como fonte de navegador em CADA cena (copie a
-         fonte e cole como "referência" para reaproveitar).
-      2. Nas propriedades da fonte, marque "Atualizar navegador quando a cena
-         ficar ativa". Assim a animação toca toda vez que a cena entra.
-      3. Deixe a fonte no TOPO da lista de fontes da cena.
-      Também reage ao evento obsSceneChanged do OBS (fonte compartilhada).
+         fonte e cole como "referência" para reaproveitar) e deixe-a no TOPO.
+      2. Deixe DESMARCADAS "desligar a fonte quando não estiver visível" e
+         "atualizar o navegador quando a cena se tornar ativa": a página fica
+         carregada e toca na hora pelo evento de visibilidade do OBS, sem o
+         atraso de recarregar.
+      3. Em "Transições de cena" use "Cortar" (0 ms).
 
     Parâmetros:
-      ?dur=1600        duração total em ms
+      ?mode=full       entrada + saída (padrão: reveal = só a saída)
+      ?dur=1400        duração total em ms (padrão: 1400 no reveal, 1600 no full)
       ?texto=Gameplay  rótulo mostrado embaixo do mascote (opcional)
       ?dir=rl          sentido: lr (esquerda→direita, padrão) ou rl
       ?loop=1          repete a cada 3 s (para pré-visualizar)
@@ -30,7 +35,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="tr" id="tr">
+  <!-- "covered" no HTML: a tela já começa coberta antes de qualquer script rodar -->
+  <div class="tr covered" id="tr">
     <!-- ondas diagonais (a de trás é mais clara) -->
     <div class="tr-wave tr-wave--b"></div>
     <div class="tr-wave tr-wave--a">
