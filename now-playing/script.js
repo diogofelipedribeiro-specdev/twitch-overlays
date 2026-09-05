@@ -120,11 +120,12 @@
   function renderPanel() {
     if (!setup) return;
     document.body.classList.add('is-test');
+    document.getElementById('uri').textContent = redirectUri();
     el.setupRow.innerHTML = '';
     var has = !!localStorage.getItem(LS.refresh);
     if (!has) {
       var b = document.createElement('button'); b.textContent = 'Conectar Spotify'; b.onclick = login; el.setupRow.appendChild(b);
-      status('Redirect URI a registrar no Spotify Dashboard: ' + redirectUri());
+      status('clique em Conectar Spotify');
     } else {
       var c = document.createElement('button'); c.textContent = 'Copiar URL para o OBS';
       c.onclick = function () { navigator.clipboard.writeText(obsUrl()).then(function () { c.textContent = 'Copiado!'; }); };
