@@ -37,7 +37,13 @@
   if (document.getElementById('ninja-sprites')) play();
   else document.addEventListener('ninja:sprites-ready', play, { once: true });
 
-  // OBS: evento de troca de cena (disponível quando a fonte é compartilhada)
+  // OBS: toca quando a fonte fica visível (ao entrar na cena) — não depende
+  // das opções "atualizar ao ficar ativa" / "desligar quando não visível"
+  if (window.obsstudio) {
+    window.obsstudio.onVisibilityChange = function (visible) { if (visible) play(); };
+    window.obsstudio.onActiveChange = function (active) { if (active) play(); };
+  }
+  // OBS: evento de troca de cena (quando a fonte é compartilhada entre cenas)
   window.addEventListener('obsSceneChanged', play);
   document.addEventListener('click', play);
 

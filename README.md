@@ -195,7 +195,7 @@ Como o OBS só aceita vídeo como transição nativa, o overlay funciona assim:
 2. Nas propriedades da fonte, marque **"Atualizar navegador quando a cena ficar ativa"**. A animação toca toda vez que a cena entra.
 3. Deixe a fonte no topo da lista de fontes.
 
-Ela também reage ao evento `obsSceneChanged` do OBS quando a fonte é compartilhada. Parâmetros: `?dur=1600`, `?texto=Gameplay`, `?dir=rl`, `?emote=hype`, `?full=1` (corpo inteiro), `?loop=1` (pré-visualização).
+A página também escuta os eventos do próprio OBS (`obsstudio.onVisibilityChange`, `onActiveChange` e `obsSceneChanged`), então toca ao entrar na cena mesmo sem essas caixas marcadas. Elas ficam no fim da janela de propriedades, abaixo do campo "CSS personalizado" (role a janela). Parâmetros: `?dur=1600`, `?texto=Gameplay`, `?dir=rl`, `?emote=hype`, `?full=1` (corpo inteiro), `?loop=1` (pré-visualização).
 
 ### 4.7 Cena League of Legends com map cover — `lol/index.html`
 
