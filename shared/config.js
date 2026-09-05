@@ -11,7 +11,7 @@ window.NINJA_CONFIG = {
 
   // Login do seu canal na Twitch (minúsculo). Usado pelo chat embutido e pelo EventSub.
   // Ex.: "daretoreact"
-  TWITCH_CHANNEL: "SEUCANAL",
+  TWITCH_CHANNEL: "daretoreact",
 
   // Nome exibido nos overlays (pode ter maiúsculas). Vem da arte do handoff.
   CHANNEL_DISPLAY_NAME: "daretoreact",
@@ -25,13 +25,13 @@ window.NINJA_CONFIG = {
 
   // Client ID do app criado no Twitch Developer Console (https://dev.twitch.tv/console/apps)
   // Necessário apenas para os alertas em produção (EventSub WebSocket).
-  TWITCH_CLIENT_ID: "SEU_TWITCH_CLIENT_ID",
+  TWITCH_CLIENT_ID: "0ntrcdggw2m4am9j664n6c3i68od81",
 
   /* ---------- SPOTIFY ---------- */
 
   // Client ID do app criado no Spotify Developer Dashboard (https://developer.spotify.com/dashboard)
   // Usado pelo widget Now Playing (Authorization Code + PKCE, sem client secret).
-  SPOTIFY_CLIENT_ID: "SEU_SPOTIFY_CLIENT_ID",
+  SPOTIFY_CLIENT_ID: "dd765a6cc8a74f0f8acefa0dbc5bb582",
 
   /* ---------- ALERTAS ---------- */
 

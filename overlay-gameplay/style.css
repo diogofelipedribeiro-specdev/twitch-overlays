@@ -27,7 +27,7 @@ html, body { width: 100%; height: 100%; background: transparent; }
   /* faixa colorida de fora + sombra "recortada" */
   box-shadow: 0 0 0 5px var(--c-primary), 0 10px 0 5px var(--c-ink);
   background: transparent;          /* a webcam fica atrás, no OBS */
-  animation: cam-in .8s var(--ease-bounce) both;
+  animation: cam-in var(--anim-in) var(--ease-bounce) both;
 }
 .hud.no-cam .cam { display: none; }
 @keyframes cam-in { from { transform: translateY(30px) scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -50,7 +50,7 @@ html, body { width: 100%; height: 100%; background: transparent; }
   border: 4px solid var(--c-ink);
   border-radius: 10px 4px 10px 4px;
   transform-origin: left center;
-  animation: tail-wiggle 2.6s ease-in-out infinite;
+  animation: tail-wiggle var(--anim-idle) ease-in-out infinite;
 }
 .tails::after {
   content: ''; position: absolute; right: -6px; top: 12px;
@@ -69,7 +69,7 @@ html, body { width: 100%; height: 100%; background: transparent; }
   border-radius: var(--radius-pill);
   background: var(--c-sand);
   box-shadow: 0 6px 0 var(--c-ink);
-  animation: badge-in .8s .15s var(--ease-bounce) both;
+  animation: badge-in var(--anim-in) .2s var(--ease-bounce) both;
 }
 @keyframes badge-in { from { transform: translateX(-24px); opacity: 0; } to { transform: none; opacity: 1; } }
 .hud[data-pos="br"] .badge, .hud[data-pos="tr"] .badge { flex-direction: row-reverse; padding: 8px 10px 8px 18px; }
@@ -84,7 +84,7 @@ html, body { width: 100%; height: 100%; background: transparent; }
   width: 12px; height: 12px; border-radius: 50%;
   background: var(--c-primary);
   border: 3px solid var(--c-ink);
-  animation: pulse 1.6s infinite;
+  animation: pulse var(--anim-pulse) infinite;
 }
 .badge-live.hidden { display: none; }
 

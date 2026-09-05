@@ -41,9 +41,9 @@ window.NinjaParticles = (function () {
       for (var i = 0; i < 26; i++) {
         out.push({
           kind: 'circle', x: x + rand(-160, 160), y: y + rand(-20, 60),
-          vx: rand(-20, 20), vy: rand(-140, -60), g: -10, drag: .995,
+          vx: rand(-15, 15), vy: rand(-90, -40), g: -8, drag: .995,
           r: rand(4, 14), color: pick([P.primary, P.teal2, P.teal3, P.teal4]),
-          life: rand(1.4, 2.4), t: 0, stroke: P.ink, alpha: .9,
+          life: rand(2.2, 3.4), t: 0, stroke: P.ink, alpha: .9,
         });
       }
       return out;
@@ -51,13 +51,13 @@ window.NinjaParticles = (function () {
     confetti: function (x, y, P) {
       var out = [];
       for (var i = 0; i < 110; i++) {
-        var a = rand(-Math.PI, 0), sp = rand(260, 720);
+        var a = rand(-Math.PI, 0), sp = rand(200, 560);
         out.push({
           kind: 'rect', x: x, y: y,
-          vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 900, drag: .985,
-          w: rand(8, 16), h: rand(5, 9), rot: rand(0, 6.28), vr: rand(-12, 12),
+          vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 700, drag: .985,
+          w: rand(8, 16), h: rand(5, 9), rot: rand(0, 6.28), vr: rand(-8, 8),
           color: pick([P.primary, P.teal2, P.teal3, P.teal4, P.sand, P.coral, P.white]),
-          life: rand(1.6, 2.8), t: 0, stroke: P.ink, alpha: 1,
+          life: rand(2.2, 3.6), t: 0, stroke: P.ink, alpha: 1,
         });
       }
       return out;
@@ -65,12 +65,12 @@ window.NinjaParticles = (function () {
     sparks: function (x, y, P) {
       var out = [];
       for (var i = 0; i < 90; i++) {
-        var a = rand(0, 6.283), sp = rand(200, 900);
+        var a = rand(0, 6.283), sp = rand(160, 700);
         out.push({
           kind: 'spark', x: x, y: y,
           vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 500, drag: .96,
           len: rand(6, 22), color: pick([P.primary, P.white, P.teal3, P.teal2]),
-          life: rand(.5, 1.1), t: 0, alpha: 1, glow: true,
+          life: rand(.7, 1.4), t: 0, alpha: 1, glow: true,
         });
       }
       // estrelinhas que ficam um pouco mais
@@ -79,7 +79,7 @@ window.NinjaParticles = (function () {
           kind: 'star', x: x + rand(-220, 220), y: y + rand(-120, 120),
           vx: rand(-30, 30), vy: rand(-80, -20), g: 0, drag: .99,
           r: rand(6, 12), color: pick([P.white, P.primary]), rot: rand(0, 6.28), vr: rand(-4, 4),
-          life: rand(1, 1.8), t: 0, alpha: 1, glow: true,
+          life: rand(1.4, 2.4), t: 0, alpha: 1, glow: true,
         });
       }
       return out;
@@ -129,7 +129,7 @@ window.NinjaParticles = (function () {
         ctx.rotate(ang); ctx.lineWidth = 3; ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-p.len * k, 0); ctx.stroke();
       } else if (p.kind === 'star') {
-        star(0, 0, p.r * (0.6 + 0.4 * Math.sin(p.t * 12)), p.rot); ctx.fill();
+        star(0, 0, p.r * (0.6 + 0.4 * Math.sin(p.t * 7)), p.rot); ctx.fill();
       }
       ctx.restore();
     }

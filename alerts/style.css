@@ -46,7 +46,7 @@ html, body { width: 100%; height: 100%; background: transparent; }
   border: 4px solid var(--c-ink);
   border-radius: 10px 4px 10px 4px;
   transform-origin: left center;
-  animation: tail-wiggle 1.8s ease-in-out infinite;
+  animation: tail-wiggle var(--anim-idle) ease-in-out infinite;
   z-index: -1;
 }
 @keyframes tail-wiggle { 0%,100% { rotate: -4deg; } 50% { rotate: 6deg; } }
@@ -115,26 +115,26 @@ html, body { width: 100%; height: 100%; background: transparent; }
 /* ---------- animações de entrada / saída ---------- */
 
 /* follow: desliza da esquerda com quique leve; emote acena "de boa" */
-.alert--follow.in  { animation: follow-in .75s var(--ease-bounce) both; }
-.alert--follow.out { animation: follow-out .5s ease-in both; }
-.alert--follow.in .emote-svg { animation: nod 1.4s ease-in-out infinite; }
+.alert--follow.in  { animation: follow-in var(--anim-in) var(--ease-bounce) both; }
+.alert--follow.out { animation: follow-out var(--anim-out) ease-in both; }
+.alert--follow.in .emote-svg { animation: nod 2.8s ease-in-out infinite; }
 @keyframes follow-in  { from { transform: translateX(-120%) rotate(-3deg); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes follow-out { to { transform: translateX(-120%) rotate(2deg); opacity: 0; } }
 @keyframes nod { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-3px); } }
 
 /* sub: cai de cima, quica e o emote pula de alegria */
-.alert--sub.in  { animation: sub-in .9s var(--ease-bounce) both; }
-.alert--sub.out { animation: sub-out .55s ease-in both; }
-.alert--sub.in .emote-svg { animation: jump .7s ease-in-out infinite; }
+.alert--sub.in  { animation: sub-in var(--anim-in) var(--ease-bounce) both; }
+.alert--sub.out { animation: sub-out var(--anim-out) ease-in both; }
+.alert--sub.in .emote-svg { animation: jump 1.5s ease-in-out infinite; }
 @keyframes sub-in  { 0% { transform: translateY(-160%) scale(.9); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }
 @keyframes sub-out { to { transform: translateY(40px) scale(.94); opacity: 0; } }
 @keyframes jump { 0%,100% { transform: translateY(0) scale(1,1); } 30% { transform: translateY(-14px) scale(.95,1.08); } 60% { transform: translateY(0) scale(1.06,.94); } }
 
 /* bits: aparece com "zoom + tremida" e brilho pulsante */
-.alert--bits.in  { animation: bits-in .6s var(--ease-out) both, shake .5s .6s ease-in-out 2; }
-.alert--bits.out { animation: bits-out .45s ease-in both; }
-.alert--bits.in .emote-svg { animation: vibrate .18s linear infinite; }
-.alert--bits.in .alert-emote { animation: glow 1s ease-in-out infinite alternate; }
+.alert--bits.in  { animation: bits-in .9s var(--ease-out) both, shake .8s .9s ease-in-out 2; }
+.alert--bits.out { animation: bits-out var(--anim-out) ease-in both; }
+.alert--bits.in .emote-svg { animation: vibrate .4s linear infinite; }
+.alert--bits.in .alert-emote { animation: glow 2.2s ease-in-out infinite alternate; }
 @keyframes bits-in  { from { transform: scale(.4) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes bits-out { to { transform: scale(.6); opacity: 0; filter: blur(4px); } }
 @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px) rotate(-1deg); } 40% { transform: translateX(8px) rotate(1deg); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }

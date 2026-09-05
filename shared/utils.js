@@ -102,6 +102,13 @@ window.Ninja = (function () {
     return svg;
   }
 
+  /* ?motion=0 desliga todas as animações (classe no <body>, ver shared/theme.css) */
+  function applyMotionFlag() {
+    if (!qsBool('motion', true)) document.body.classList.add('no-motion');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyMotionFlag);
+  else applyMotionFlag();
+
   return {
     qs: qs, qsBool: qsBool, setting: setting, escapeHtml: escapeHtml, template: template,
     fitText: fitText, chatParent: chatParent, randomString: randomString,

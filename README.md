@@ -45,6 +45,10 @@ Fontes (Google Fonts, carregadas em `shared/theme.css`):
 
 Para trocar qualquer cor ou fonte em **todos** os overlays, edite apenas `shared/theme.css`.
 
+Velocidade das animações: também em `shared/theme.css`, nas variáveis `--anim-in` (entradas), `--anim-out` (saídas), `--anim-pulse` (pontinho AO VIVO), `--anim-idle` (balanços leves) e `--anim-slow` (respiração do cenário). Aumente os valores para deixar tudo mais lento; as demais animações de cada overlay são proporcionais a elas.
+
+Para desligar todo o movimento de um overlay, acrescente `?motion=0` à URL. Os overlays **ignoram** a opção "reduzir animações" do sistema operacional de propósito: no OBS eles devem animar sempre, e encurtar loops infinitos para ~0 ms faria os elementos tremerem em vez de parar.
+
 > Fontes offline: se preferir não depender do Google Fonts, baixe os `.woff2` para `assets/fonts/` e troque o `@import` de `theme.css` por regras `@font-face`.
 
 ---
