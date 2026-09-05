@@ -62,7 +62,7 @@ A publicação é **automática** pelo workflow `.github/workflows/deploy.yml` (
 1. **validate** — regenera os SVGs com `tools/gen-assets.py` e falha se os arquivos commitados estiverem desatualizados; roda `tools/check-links.py` (confere que todo `href`/`src`/`url()` aponta para um arquivo existente com o mesmo caso de letras, já que o Pages roda em Linux); valida a sintaxe dos HTMLs com `htmlhint`.
 2. **deploy** — empacota a raiz do repositório e publica no GitHub Pages (`actions/deploy-pages`). A URL aparece no resumo do job.
 
-Configuração única no GitHub: **Settings → Pages → Build and deployment → Source: "GitHub Actions"**. O workflow tenta habilitar isso sozinho na primeira execução (`enablement: true`), mas confirme se o job `deploy` reclamar.
+Configuração única no GitHub, **antes da primeira execução**: **Settings → Pages → Build and deployment → Source: "GitHub Actions"**. O token do workflow não tem permissão para criar o site do Pages sozinho; sem esse passo o job `deploy` falha com "Resource not accessible by integration".
 
 Fluxo do dia a dia:
 
