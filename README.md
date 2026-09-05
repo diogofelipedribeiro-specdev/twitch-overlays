@@ -51,10 +51,10 @@ Para trocar qualquer cor ou fonte em **todos** os overlays, edite apenas `shared
 
 ## 2. Deploy no GitHub Pages
 
-O repositório oficial é `devdfr-diogo/twitch-overlays` e o site fica em:
+O repositório oficial é `diogofelipedribeiro-specdev/twitch-overlays` e o site fica em:
 
 ```
-https://devdfr-diogo.github.io/twitch-overlays/
+https://diogofelipedribeiro-specdev.github.io/twitch-overlays/
 ```
 
 A publicação é **automática** pelo workflow `.github/workflows/deploy.yml` (GitHub Actions). A cada push na branch `main`:
@@ -113,11 +113,11 @@ Browser Source **1920 × 1080**. Usa a composição do template de thumbnail com
 O chat usa o embed oficial:
 
 ```
-https://www.twitch.tv/embed/SEUCANAL/chat?parent=devdfr-diogo.github.io
+https://www.twitch.tv/embed/SEUCANAL/chat?parent=diogofelipedribeiro-specdev.github.io
 ```
 
 - `SEUCANAL` → `TWITCH_CHANNEL` em `shared/config.js` ou `?canal=`.
-- `parent` → **deve ser o domínio que hospeda a página**. É detectado automaticamente (`devdfr-diogo.github.io` no Pages, `localhost` em teste). Force com `CHAT_PARENT` ou `?parent=` se necessário.
+- `parent` → **deve ser o domínio que hospeda a página**. É detectado automaticamente (`diogofelipedribeiro-specdev.github.io` no Pages, `localhost` em teste). Force com `CHAT_PARENT` ou `?parent=` se necessário.
 - O conteúdo interno do iframe não é estilizável (regra da Twitch); a moldura sim. `?tema=dark` ativa o modo escuro do chat.
 
 Parâmetros: `?titulo=`, `?sub=`, `?nome=`, `?tema=dark`, `?chat=0`.
@@ -174,7 +174,7 @@ Parâmetros: `?setup=1`, `?autohide=1`, `?compact=1`, `?tema=dark`, `?demo=1`.
 1. Acesse <https://developer.spotify.com/dashboard> → **Create app**.
 2. Em **Redirect URIs** adicione **exatamente** a URL da página do widget:
    ```
-   https://devdfr-diogo.github.io/twitch-overlays/now-playing/index.html
+   https://diogofelipedribeiro-specdev.github.io/twitch-overlays/now-playing/index.html
    ```
    Para testes locais adicione também `http://127.0.0.1:8080/now-playing/index.html` (o Spotify não aceita `localhost`; use `127.0.0.1`).
 3. Marque **Web API**, salve e copie o **Client ID** para `SPOTIFY_CLIENT_ID` em `shared/config.js`.
@@ -196,7 +196,7 @@ O conector está em `alerts/twitch-eventsub.js` e é ativado com `?twitch=1`.
 1. Acesse <https://dev.twitch.tv/console/apps> → **Register Your Application**.
 2. **OAuth Redirect URLs**: a URL da página de alertas:
    ```
-   https://devdfr-diogo.github.io/twitch-overlays/alerts/index.html
+   https://diogofelipedribeiro-specdev.github.io/twitch-overlays/alerts/index.html
    ```
    (para teste local: `http://localhost:8080/alerts/index.html`)
 3. Category: *Broadcaster Suite*. Client Type: **Public**. Salve e copie o **Client ID** para `TWITCH_CLIENT_ID`.
