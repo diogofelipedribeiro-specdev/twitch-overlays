@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cena inicial · ninja praiano</title>
+  <!--
+    CENA INICIAL ("starting soon")
+    Browser Source recomendado: 1920 × 1080.
+    Parâmetros opcionais na URL:
+      ?canal=SEUCANAL        login da Twitch (sobrescreve shared/config.js)
+      ?parent=host           parent do chat (normalmente automático)
+      ?titulo=COMEÇANDO JÁ JÁ
+      ?sub=pega uma água de coco e senta aí
+      ?nome=daretoreact      nome exibido no rodapé
+      ?tema=dark             chat em modo escuro (padrão: claro)
+      ?chat=0                esconde o chat
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Palco fixo 1920×1080, escalado via JS para caber em qualquer tamanho de Browser Source -->
+  <div class="stage" id="stage">
+
+    <!-- ===== FUNDO: composição do template de thumbnail (1280×720 escalado 1.5×) ===== -->
+    <svg class="bg" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="0" y="0" width="1280" height="720" fill="var(--c-sand)"/>
+      <!-- faixa diagonal água -->
+      <path d="M700 0 L1280 0 L1280 720 L560 720 Z" fill="var(--c-primary)"/>
+      <path d="M700 0 L742 0 L602 720 L560 720 Z" fill="var(--c-teal-4)"/>
+      <!-- sol -->
+      <g class="sun">
+        <circle cx="1130" cy="122" r="96" fill="var(--c-teal-4)" opacity=".35"/>
+        <circle cx="1130" cy="122" r="80" fill="var(--c-teal-4)" stroke="var(--c-ink)" stroke-width="7"/>
+      </g>
+      <!-- areia -->
+      <path d="M-6 620 L1286 620 L1286 726 L-6 726 Z" fill="var(--c-teal-2)" stroke="var(--c-ink)" stroke-width="6"/>
+      <!-- espuma animada sobre a areia -->
+      <g class="foam" stroke="var(--c-teal-3)" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M20 660 C90 650 150 674 220 664 C290 654 350 678 420 668"/>
+        <path d="M900 672 C970 662 1030 684 1100 674 C1170 664 1230 684 1290 676"/>
+      </g>
+      <!-- palmeira -->
+      <g class="palm" transform="translate(1074 400) scale(0.7)"><use href="#palm"/></g>
+      <!-- mascote -->
+      <g class="ninja" transform="translate(690 96) scale(1.02)"><use href="#nj-full"/></g>
+    </svg>
+
+    <!-- ===== COLUNA ESQUERDA ===== -->
+    <div class="left">
+      <div class="row-top">
+        <div class="pill pill--live" id="live"><span class="dot"></span><span>AO VIVO</span></div>
+        <div class="brand headline" id="titulo">COMEÇANDO JÁ JÁ</div>
+      </div>
+      <div class="subtitle" id="sub">pega uma água de coco e senta aí</div>
+
+      <!-- Moldura do chat (o conteúdo do iframe não é estilizável; a moldura sim) -->
+      <div class="chat-frame card" id="chatFrame">
+        <div class="chat-head">
+          <svg class="chat-emote" viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg>
+          <span>chat</span>
+          <span class="chat-tails" aria-hidden="true"></span>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <!-- iframe inserido pelo script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- nome do canal na areia (como na thumbnail) -->
+    <div class="brand channel" id="nome">daretoreact</div>
+
+    <!-- ===== DECORAÇÃO: emotes flutuando ===== -->
+    <svg class="float f1" viewBox="100 34 200 200"><use href="#emote-hype"/></svg>
+    <svg class="float f2" viewBox="100 34 200 200"><use href="#emote-risada"/></svg>
+    <svg class="float f3" viewBox="100 34 200 200"><use href="#emote-em-extase"/></svg>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Playing · Spotify · ninja praiano</title>
+  <!--
+    WIDGET "NOW PLAYING" (Spotify)
+    Browser Source recomendado: 560 × 160, fundo transparente.
+
+    Autenticação: Authorization Code + PKCE, 100% no navegador (sem client secret).
+      1. Coloque o Client ID em shared/config.js (SPOTIFY_CLIENT_ID) ou use ?client_id=
+      2. Registre como Redirect URI no Spotify Dashboard EXATAMENTE a URL desta página:
+           https://SEUUSUARIO.github.io/NOME-DO-REPO/now-playing/index.html
+      3. Abra index.html?setup=1, clique em "Conectar Spotify", autorize.
+      4. Clique em "Copiar URL para o OBS" e cole no Browser Source.
+         (ou use "Interagir" no OBS e faça o login ali mesmo)
+
+    Parâmetros:
+      ?setup=1        mostra o painel de conexão
+      ?autohide=1     esconde o widget quando nada está tocando (padrão: mostra "nada tocando")
+      ?compact=1      versão menor (só capa + título/artista)
+      ?tema=dark      cartão escuro
+      ?poll=3000      intervalo de consulta em ms (mín. 1000)
+      ?demo=1         mostra dados fictícios para ajustar o visual sem login
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="np card" id="np" data-state="idle">
+    <!-- capa -->
+    <div class="np-cover">
+      <img id="cover" alt="" src="">
+      <!-- barras "equalizador" animadas enquanto toca -->
+      <div class="np-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- textos -->
+    <div class="np-text">
+      <div class="np-kicker">
+        <svg class="np-emote" viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg>
+        <span id="kicker">tocando agora</span>
+      </div>
+      <div class="np-title"><span id="title">nada tocando</span></div>
+      <div class="np-artist" id="artist">—</div>
+      <div class="np-progress">
+        <div class="np-bar"><div class="np-fill" id="fill"></div></div>
+        <div class="np-time"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+      </div>
+    </div>
+
+    <!-- faixa da bandana -->
+    <span class="np-tails" aria-hidden="true"></span>
+  </div>
+
+  <!-- painel de configuração (?setup=1) -->
+  <div class="setup-panel only-test" id="setup">
+    <div class="sp-title">Spotify · conexão</div>
+    <div class="sp-status" id="status">—</div>
+    <div class="sp-row" id="setupRow"></div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

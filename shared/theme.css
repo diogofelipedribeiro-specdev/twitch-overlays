@@ -1,0 +1,120 @@
+/* ============================================================
+   shared/theme.css — TEMA CENTRAL (ninja praiano · daretoreact)
+   ------------------------------------------------------------
+   Troque cores e fontes AQUI e todos os overlays acompanham.
+   Paleta e tipografia extraídas do handoff do Claude Design
+   (assets/source/ninja-praiano-design-original.html).
+   ============================================================ */
+
+/* Fontes do Google (Bungee = impacto, Fredoka = alertas/texto, Poppins = painéis) */
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap');
+
+:root {
+  /* ---- Paleta base (do handoff) ---- */
+  --c-primary:   #16c1c8;   /* primária — água/ciano */
+  --c-teal-2:    #49cccc;   /* mar */
+  --c-teal-3:    #7cd7cf;   /* espuma */
+  --c-teal-4:    #aee1d3;   /* areia molhada */
+  --c-sand:      #e1ecd6;   /* mais clara — areia/fundo */
+
+  /* ---- Cores de apoio usadas nas artes ---- */
+  --c-ink:       #123c3f;   /* contorno / texto escuro */
+  --c-primary-dark: #0f9ba1;/* primária escurecida (títulos, links) */
+  --c-muted:     #5e7f7a;   /* texto secundário / tronco da palmeira */
+  --c-skin:      #c98a52;   /* pele do mascote */
+  --c-shorts:    #17565c;   /* bermuda do mascote */
+  --c-coral:     #f2807f;   /* corações do emote "em êxtase" */
+  --c-white:     #ffffff;
+
+  /* ---- Tipografia ---- */
+  --font-impact:  'Bungee', 'Impact', sans-serif;      /* nome do canal, títulos */
+  --font-text:    'Fredoka', system-ui, sans-serif;    /* alertas e textos legíveis */
+  --font-panel:   'Poppins', system-ui, sans-serif;    /* thumb, banner, painéis */
+
+  /* ---- Formas e efeitos ---- */
+  --stroke:       6px;                                 /* espessura do contorno das artes */
+  --radius-pill:  999px;
+  --radius-card:  24px;
+  --shadow-card:  0 12px 32px rgba(18, 60, 63, .22);
+  --shadow-ink:   0 6px 0 var(--c-ink);                /* sombra "recortada" estilo cartoon */
+
+  /* ---- Movimento ---- */
+  --ease-bounce:  cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out:     cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ---- Reset mínimo para Browser Source (fundo transparente) ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--font-text);
+  color: var(--c-ink);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ---- Utilitários reaproveitados pelos overlays ---- */
+
+/* Pílula "AO VIVO" — mesma forma da thumbnail (rx 27, contorno #123c3f, fundo primária) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  padding: .5em 1.15em;
+  border-radius: var(--radius-pill);
+  background: var(--c-primary);
+  border: var(--stroke) solid var(--c-ink);
+  color: var(--c-white);
+  font-family: var(--font-panel);
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+.pill--live .dot {
+  width: .6em;
+  height: .6em;
+  border-radius: 50%;
+  background: var(--c-white);
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, .7);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, .75); }
+  70%  { box-shadow: 0 0 0 .55em rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Cartão "recortado" com contorno grosso (estilo das artes) */
+.card {
+  background: var(--c-sand);
+  border: var(--stroke) solid var(--c-ink);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-ink);
+}
+
+/* Título de impacto */
+.brand {
+  font-family: var(--font-impact);
+  color: var(--c-ink);
+  line-height: 1;
+  letter-spacing: .01em;
+}
+
+/* Onda decorativa em CSS (linha de espuma como no banner) */
+.wave-line {
+  height: 7px;
+  border-radius: 7px;
+  background: var(--c-teal-3);
+}
+
+/* Esconde qualquer coisa marcada como "somente para teste" quando não está em modo teste */
+body:not(.is-test) .only-test { display: none !important; }
+
+/* Acessibilidade: respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

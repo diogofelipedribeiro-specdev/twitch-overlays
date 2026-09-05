@@ -1,0 +1,78 @@
+# ============================================================
+# Deploy automático no GitHub Pages
+# ------------------------------------------------------------
+# A cada push na branch main (ou manualmente em Actions → Run workflow):
+#   1. validate — regenera os SVGs a partir do design e falha se os arquivos
+#                 commitados estiverem desatualizados; confere caminhos locais
+#                 (case-sensitive) e a sintaxe dos HTMLs.
+#   2. deploy   — publica a raiz do repositório no GitHub Pages.
+# Requisito único: Settings → Pages → Source = "GitHub Actions".
+# ============================================================
+name: Deploy no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# só um deploy por vez; um push novo cancela o anterior em andamento
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validar projeto
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerar assets a partir do design original
+        run: python tools/gen-assets.py
+
+      - name: Conferir que os SVGs commitados estão em dia
+        run: |
+          if ! git diff --quiet -- assets shared/sprites.js; then
+            echo "::error::Os assets gerados diferem dos commitados. Rode 'python tools/gen-assets.py' e faça commit."
+            git --no-pager diff --stat -- assets shared/sprites.js
+            exit 1
+          fi
+
+      - name: Conferir referências a arquivos locais (case-sensitive)
+        run: python tools/check-links.py
+
+      - name: Validar sintaxe HTML
+        run: npx --yes htmlhint "**/*.html" --ignore "assets/source/**,node_modules/**"
+
+  deploy:
+    name: Publicar no Pages
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true   # tenta habilitar o Pages sozinho na primeira execução
+
+      - name: Empacotar o site (raiz do repositório)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

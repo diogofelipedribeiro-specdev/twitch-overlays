@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overlays · ninja praiano</title>
+  <!-- Página índice: lista os overlays com links prontos para copiar no OBS/Streamlabs. -->
+  <link rel="stylesheet" href="shared/theme.css">
+  <style>
+    html, body { overflow: auto; background: var(--c-sand); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 96px; display: flex; flex-direction: column; gap: 32px; }
+    header { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    header svg { width: 120px; height: 120px; }
+    h1 { font-family: var(--font-impact); font-size: 48px; margin: 0; line-height: 1; }
+    .sub { font-family: var(--font-panel); font-weight: 600; color: var(--c-muted); margin-top: 6px; }
+    .banner { border-radius: 16px; overflow: hidden; border: 4px solid var(--c-ink); box-shadow: 0 8px 0 var(--c-ink); }
+    .banner img { display: block; width: 100%; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .item { background: var(--c-white); border: 4px solid var(--c-ink); border-radius: 20px; box-shadow: 0 6px 0 var(--c-ink); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .item h2 { font-family: var(--font-impact); font-size: 22px; margin: 0; }
+    .item p { margin: 0; font-size: 16px; color: var(--c-muted); }
+    .item .size { font-family: var(--font-panel); font-weight: 700; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--c-primary-dark); }
+    .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .links a { font: 600 13px var(--font-panel); color: var(--c-white); background: var(--c-primary); border: 3px solid var(--c-ink); border-radius: 999px; padding: 6px 12px; box-shadow: 0 3px 0 var(--c-ink); }
+    .links a.alt { background: var(--c-sand); color: var(--c-ink); }
+    .url { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--c-sand); border: 2px solid var(--c-ink); border-radius: 8px; padding: 6px 10px; word-break: break-all; user-select: all; }
+    .emotes { display: flex; gap: 14px; flex-wrap: wrap; }
+    .emotes img { width: 72px; height: 72px; }
+    footer { font-size: 14px; color: var(--c-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="assets/svg/mascote-busto.svg" alt="mascote ninja praiano" width="120" height="120">
+      <div>
+        <h1>daretoreact · overlays</h1>
+        <div class="sub">ninja praiano · kit de overlays e widgets para Twitch (GitHub Pages)</div>
+      </div>
+    </header>
+
+    <div class="banner"><img src="assets/svg/banner-1200x480.svg" alt="banner"></div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="item">
+      <h2>Emotes (assets/emotes)</h2>
+      <div class="emotes">
+        <img src="assets/emotes/risada.svg" alt="risada" title="risada">
+        <img src="assets/emotes/hype.svg" alt="hype" title="hype">
+        <img src="assets/emotes/gg.svg" alt="gg" title="gg">
+        <img src="assets/emotes/to-de-boa.svg" alt="tô de boa" title="tô de boa">
+        <img src="assets/emotes/em-extase.svg" alt="em êxtase" title="em êxtase">
+      </div>
+    </div>
+
+    <footer>Leia o <a href="README.md">README.md</a> para configurar canal, Spotify e Twitch EventSub. Troque cores e fontes em <code>shared/theme.css</code>.</footer>
+  </div>
+
+  <script>
+    // Monta a lista com URLs absolutas (já prontas para colar no OBS)
+    var base = location.href.replace(/index\.html.*$/, '').replace(/[?#].*$/, '');
+    var items = [
+      { t: 'Cena inicial', s: '1920 × 1080', d: 'Thumb como fundo, indicador AO VIVO e chat da Twitch embutido.',
+        links: [['abrir', 'starting-scene/index.html?canal=SEUCANAL']], url: 'starting-scene/index.html?canal=SEUCANAL' },
+      { t: 'HUD gameplay · com câmera', s: '1920 × 1080 · transparente', d: 'Moldura para webcam + nome do canal.',
+        links: [['abrir', 'overlay-gameplay/index.html?cam=1']], url: 'overlay-gameplay/index.html?cam=1' },
+      { t: 'HUD gameplay · sem câmera', s: '1920 × 1080 · transparente', d: 'Só o essencial, minimalista.',
+        links: [['abrir', 'overlay-gameplay/index.html?cam=0']], url: 'overlay-gameplay/index.html?cam=0' },
+      { t: 'Alertas', s: '1920 × 1080 · transparente', d: 'Follow, sub e bits com partículas. Modo teste com botões.',
+        links: [['testar', 'alerts/index.html?test=1'], ['demo', 'alerts/index.html?demo=all']], url: 'alerts/index.html?twitch=1' },
+      { t: 'Now Playing (Spotify)', s: '560 × 160 · transparente', d: 'Capa, música, artista e progresso via PKCE.',
+        links: [['configurar', 'now-playing/index.html?setup=1'], ['demo', 'now-playing/index.html?demo=1']], url: 'now-playing/index.html' },
+      { t: 'Thumbnail template', s: '1280 × 720', d: 'Template SVG de thumbnail para VODs (edite os textos no arquivo).',
+        links: [['abrir', 'assets/svg/thumbnail-1280x720.svg']], url: 'assets/svg/thumbnail-1280x720.svg' },
+    ];
+    document.getElementById('grid').innerHTML = items.map(function (i) {
+      return '<div class="item"><div class="size">' + i.s + '</div><h2>' + i.t + '</h2><p>' + i.d + '</p>' +
+        '<div class="links">' + i.links.map(function (l, k) { return '<a class="' + (k ? 'alt' : '') + '" href="' + l[1] + '" target="_blank">' + l[0] + '</a>'; }).join('') + '</div>' +
+        '<div class="url">' + base + i.url + '</div></div>';
+    }).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alertas · ninja praiano</title>
+  <!--
+    ALERTAS (follow / sub / bits)
+    Browser Source recomendado: 1920 × 1080, fundo transparente.
+
+    MODO TESTE (para ajustar o visual sem eventos reais):
+      index.html?test=1           mostra o painel com botões (F / S / B no teclado também disparam)
+      index.html?demo=sub         dispara um alerta fake ao abrir (follow | sub | bits | all)
+      index.html?loop=1           fica repetindo alertas aleatórios (junto com ?test=1 ou ?demo=)
+
+    PRODUÇÃO (eventos reais via Twitch EventSub WebSocket):
+      index.html?twitch=1         liga o conector (ver twitch-eventsub.js e README)
+      index.html?twitch=1&setup=1 mostra o botão "Conectar Twitch" para autorizar
+
+    Outros parâmetros:
+      ?pos=tl|tc|tr|bl|bc|br     posição do alerta (padrão: tl = topo esquerdo)
+      ?dur=7000                  duração de cada alerta (ms)
+      ?som=0                     desliga o som (por padrão não há som; ver alerts.js)
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- partículas (confete, bolhas, faíscas) — desenhadas em canvas, sem imagens -->
+  <canvas id="particles"></canvas>
+
+  <!-- palco do alerta -->
+  <div class="alert-stage" id="stage" data-pos="tl">
+    <!--
+      TEMPLATE DO ALERTA — variáveis estilo Streamlabs:
+        {name}            nome de quem seguiu / assinou / mandou bits
+        {amount}          quantidade (bits, meses ou subs de presente)
+        {messageTemplate} frase configurada em shared/config.js (ALERT_TEMPLATES) já com {name}/{amount}
+        {userMessage}     mensagem escrita pelo usuário (sub/bits) — fonte diminui se for longa
+      O alerts.js clona este template e preenche as variáveis.
+    -->
+    <template id="alert-template">
+      <div class="alert">
+        <div class="alert-card card">
+          <div class="alert-emote">
+            <svg class="emote-svg" viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg>
+            <span class="alert-tails" aria-hidden="true"></span>
+          </div>
+          <div class="alert-text">
+            <div class="alert-kicker">{kicker}</div>
+            <div class="alert-message">{messageTemplate}</div>
+            <div class="alert-user-message">{userMessage}</div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- ===== PAINEL DE TESTE (só aparece com ?test=1) ===== -->
+  <div class="test-panel only-test" id="testPanel">
+    <div class="tp-title">Modo teste · alertas</div>
+    <div class="tp-row">
+      <button data-fire="follow">Follow (F)</button>
+      <button data-fire="sub">Sub (S)</button>
+      <button data-fire="bits">Bits (B)</button>
+    </div>
+    <div class="tp-row">
+      <button data-fire="sub-long">Sub · msg longa</button>
+      <button data-fire="bits-huge">Bits · 10 000</button>
+      <button data-fire="random">Aleatório</button>
+    </div>
+    <div class="tp-row">
+      <label><input type="checkbox" id="tpLoop"> loop</label>
+      <label>pos <select id="tpPos">
+        <option value="tl">topo esq.</option><option value="tc">topo centro</option><option value="tr">topo dir.</option>
+        <option value="bl">baixo esq.</option><option value="bc">baixo centro</option><option value="br">baixo dir.</option>
+      </select></label>
+    </div>
+    <div class="tp-status" id="tpStatus">Twitch: desconectado</div>
+    <div class="tp-row" id="tpTwitch"></div>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="particles.js"></script>
+  <script src="alerts.js"></script>
+  <script src="twitch-eventsub.js"></script>
+</body>
+</html>

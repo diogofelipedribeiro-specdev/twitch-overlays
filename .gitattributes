@@ -1,0 +1,4 @@
+# Normaliza fim de linha: LF no repositório (o runner do GitHub Actions é Linux)
+* text=auto eol=lf
+*.webp binary
+*.png binary

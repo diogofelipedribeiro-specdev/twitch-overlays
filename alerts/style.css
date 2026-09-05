@@ -1,0 +1,167 @@
+/* ============================================================
+   alerts/style.css — alertas de follow / sub / bits
+   Cores/fontes: ../shared/theme.css
+   ============================================================ */
+html, body { width: 100%; height: 100%; background: transparent; }
+
+#particles { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+/* ---------- posicionamento ---------- */
+.alert-stage { position: fixed; z-index: 2; --m: 40px; }
+.alert-stage[data-pos="tl"] { top: var(--m); left: var(--m); }
+.alert-stage[data-pos="tc"] { top: var(--m); left: 50%; transform: translateX(-50%); }
+.alert-stage[data-pos="tr"] { top: var(--m); right: var(--m); }
+.alert-stage[data-pos="bl"] { bottom: var(--m); left: var(--m); }
+.alert-stage[data-pos="bc"] { bottom: var(--m); left: 50%; transform: translateX(-50%); }
+.alert-stage[data-pos="br"] { bottom: var(--m); right: var(--m); }
+
+/* ---------- cartão ---------- */
+.alert { width: 760px; }
+.alert-card {
+  display: flex; align-items: stretch; gap: 22px;
+  padding: 18px 26px 18px 18px;
+  background: var(--c-sand);
+  box-shadow: 0 10px 0 var(--c-ink), var(--shadow-card);
+  position: relative;
+  overflow: visible;
+}
+
+/* emote no círculo */
+.alert-emote {
+  position: relative; flex: none;
+  width: 132px; height: 132px;
+  border-radius: 50%;
+  background: var(--c-teal-4);
+  border: var(--stroke) solid var(--c-ink);
+  display: grid; place-items: center;
+  align-self: center;
+}
+.emote-svg { width: 118px; height: 118px; transform-origin: 50% 80%; }
+
+/* faixa da bandana saindo do círculo */
+.alert-tails {
+  position: absolute; left: 100%; top: 34px; margin-left: -8px;
+  width: 74px; height: 12px;
+  background: var(--c-primary);
+  border: 4px solid var(--c-ink);
+  border-radius: 10px 4px 10px 4px;
+  transform-origin: left center;
+  animation: tail-wiggle 1.8s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes tail-wiggle { 0%,100% { rotate: -4deg; } 50% { rotate: 6deg; } }
+
+/* texto — alinhado à esquerda */
+.alert-text { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 4px; text-align: left; }
+
+.alert-kicker {
+  font-family: var(--font-panel);
+  font-weight: 800; font-size: 15px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--c-primary-dark);
+}
+.alert-message {
+  font-family: var(--font-text);
+  font-weight: 700; font-size: 34px; line-height: 1.12;
+  color: var(--c-ink);
+  overflow-wrap: anywhere;
+}
+.alert-message .hl {                     /* {name} e {amount} em destaque */
+  color: var(--c-white);
+  background: var(--c-primary);
+  border: 3px solid var(--c-ink);
+  border-radius: 12px;
+  padding: 0 .3em;
+  display: inline-block; line-height: 1.15;
+  box-shadow: 0 3px 0 var(--c-ink);
+}
+
+/* mensagem do usuário — altura fixa; a fonte é reduzida por JS até caber */
+.alert-user-message {
+  font-family: var(--font-text);
+  font-weight: 500; font-size: 26px; line-height: 1.18;
+  color: var(--c-muted);
+  max-height: 96px; overflow: hidden;
+  overflow-wrap: anywhere;
+  padding-left: 14px;
+  border-left: 5px solid var(--c-teal-3);
+  margin-top: 6px;
+}
+.alert-user-message:empty, .alert-user-message.empty { display: none; }
+
+/* ---------- variações por tipo ---------- */
+
+/* FOLLOW — suave */
+.alert--follow .alert-emote { background: var(--c-teal-4); }
+.alert--follow .alert-kicker { color: var(--c-primary-dark); }
+
+/* SUB — festivo */
+.alert--sub .alert-card { background: var(--c-white); }
+.alert--sub .alert-emote { background: var(--c-teal-3); }
+.alert--sub .alert-card::before {           /* faixa listrada de festa no topo */
+  content: ''; position: absolute; left: 24px; right: 24px; top: -6px; height: 12px;
+  border-radius: 6px; border: 4px solid var(--c-ink);
+  background: repeating-linear-gradient(90deg, var(--c-primary) 0 18px, var(--c-teal-3) 18px 36px, var(--c-sand) 36px 54px);
+}
+.alert--sub .alert-message .hl { background: var(--c-coral); }
+
+/* BITS — faíscas */
+.alert--bits .alert-card { background: var(--c-ink); color: var(--c-sand); }
+.alert--bits .alert-message { color: var(--c-white); }
+.alert--bits .alert-user-message { color: var(--c-teal-4); border-left-color: var(--c-primary); }
+.alert--bits .alert-kicker { color: var(--c-primary); }
+.alert--bits .alert-emote { background: var(--c-primary); box-shadow: 0 0 0 6px rgba(22,193,200,.35), 0 0 32px var(--c-primary); }
+.alert--bits .alert-message .hl { background: var(--c-white); color: var(--c-ink); }
+
+/* ---------- animações de entrada / saída ---------- */
+
+/* follow: desliza da esquerda com quique leve; emote acena "de boa" */
+.alert--follow.in  { animation: follow-in .75s var(--ease-bounce) both; }
+.alert--follow.out { animation: follow-out .5s ease-in both; }
+.alert--follow.in .emote-svg { animation: nod 1.4s ease-in-out infinite; }
+@keyframes follow-in  { from { transform: translateX(-120%) rotate(-3deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes follow-out { to { transform: translateX(-120%) rotate(2deg); opacity: 0; } }
+@keyframes nod { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-3px); } }
+
+/* sub: cai de cima, quica e o emote pula de alegria */
+.alert--sub.in  { animation: sub-in .9s var(--ease-bounce) both; }
+.alert--sub.out { animation: sub-out .55s ease-in both; }
+.alert--sub.in .emote-svg { animation: jump .7s ease-in-out infinite; }
+@keyframes sub-in  { 0% { transform: translateY(-160%) scale(.9); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }
+@keyframes sub-out { to { transform: translateY(40px) scale(.94); opacity: 0; } }
+@keyframes jump { 0%,100% { transform: translateY(0) scale(1,1); } 30% { transform: translateY(-14px) scale(.95,1.08); } 60% { transform: translateY(0) scale(1.06,.94); } }
+
+/* bits: aparece com "zoom + tremida" e brilho pulsante */
+.alert--bits.in  { animation: bits-in .6s var(--ease-out) both, shake .5s .6s ease-in-out 2; }
+.alert--bits.out { animation: bits-out .45s ease-in both; }
+.alert--bits.in .emote-svg { animation: vibrate .18s linear infinite; }
+.alert--bits.in .alert-emote { animation: glow 1s ease-in-out infinite alternate; }
+@keyframes bits-in  { from { transform: scale(.4) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes bits-out { to { transform: scale(.6); opacity: 0; filter: blur(4px); } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px) rotate(-1deg); } 40% { transform: translateX(8px) rotate(1deg); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+@keyframes vibrate { 0% { transform: translate(0,0); } 25% { transform: translate(1.5px,-1px); } 50% { transform: translate(-1.5px,1px); } 75% { transform: translate(1px,1.5px); } 100% { transform: translate(0,0); } }
+@keyframes glow { from { box-shadow: 0 0 0 6px rgba(22,193,200,.25), 0 0 16px var(--c-primary); } to { box-shadow: 0 0 0 10px rgba(22,193,200,.45), 0 0 44px var(--c-primary); } }
+
+/* ---------- painel de teste ---------- */
+.test-panel {
+  position: fixed; right: 20px; bottom: 20px; z-index: 10;
+  width: 320px; padding: 14px 16px;
+  background: var(--c-white); border: 4px solid var(--c-ink); border-radius: 16px;
+  box-shadow: 0 6px 0 var(--c-ink);
+  font-family: var(--font-panel); font-size: 13px; color: var(--c-ink);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.tp-title { font-family: var(--font-impact); font-size: 16px; }
+.tp-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tp-row:empty { display: none; }
+.test-panel button {
+  font: 600 13px var(--font-panel); cursor: pointer;
+  padding: 7px 12px; border-radius: 999px;
+  background: var(--c-primary); color: var(--c-white); border: 3px solid var(--c-ink);
+  box-shadow: 0 3px 0 var(--c-ink);
+}
+.test-panel button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--c-ink); }
+.test-panel button.secondary { background: var(--c-sand); color: var(--c-ink); }
+.test-panel select, .test-panel input[type=text] { font: 600 13px var(--font-panel); border: 3px solid var(--c-ink); border-radius: 8px; padding: 4px 6px; }
+.tp-status { font-size: 12px; color: var(--c-muted); word-break: break-all; }
+.tp-status.ok { color: var(--c-primary-dark); font-weight: 700; }
+.tp-status.err { color: #c0392b; font-weight: 700; }

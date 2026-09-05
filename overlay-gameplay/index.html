@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HUD gameplay · ninja praiano</title>
+  <!--
+    OVERLAY DE GAMEPLAY — HUD limpo e transparente
+    Browser Source recomendado: 1920 × 1080 (fundo transparente).
+    Duas versões:
+      index.html?cam=1   -> COM câmera (moldura para a webcam + nome do canal)
+      index.html?cam=0   -> SEM câmera (só o nome do canal, ainda mais minimalista)
+      (atalhos: com-camera.html / sem-camera.html)
+    Outros parâmetros:
+      ?nome=daretoreact  nome exibido
+      ?pos=bl|br|tl|tr   canto da câmera/badge (padrão: bl = inferior esquerdo)
+      ?w=480             largura da moldura da câmera (altura segue 16:9)
+      ?live=0            esconde o pontinho "ao vivo"
+      ?social=@daretoreact  linha secundária opcional (ex.: redes sociais)
+  -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hud" id="hud" data-pos="bl">
+
+    <!-- ===== MOLDURA DA CÂMERA (só em ?cam=1) =====
+         A área interna é TRANSPARENTE: posicione a fonte da webcam no OBS
+         atrás deste Browser Source, alinhada com o recorte. -->
+    <div class="cam" id="cam">
+      <div class="cam-cutout"></div>
+      <!-- cantos decorativos (espuma) -->
+      <span class="corner c-tl"></span><span class="corner c-br"></span>
+      <!-- faixa da bandana saindo do canto -->
+      <span class="tails" aria-hidden="true"></span>
+    </div>
+
+    <!-- ===== NOME DO CANAL ===== -->
+    <div class="badge card" id="badge">
+      <svg class="badge-emote" viewBox="100 34 200 200"><use href="#emote-to-de-boa"/></svg>
+      <div class="badge-text">
+        <div class="brand badge-name" id="nome">daretoreact</div>
+        <div class="badge-social" id="social"></div>
+      </div>
+      <span class="badge-live" id="live"></span>
+    </div>
+
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="../shared/utils.js"></script>
+  <script src="../shared/sprites.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

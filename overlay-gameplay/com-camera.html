@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>HUD com câmera</title>
+  <!-- Atalho: mesma página do HUD com a câmera ligada (index.html?cam=1). Outros parâmetros da URL são preservados. -->
+  <script>
+    var p = new URLSearchParams(location.search); p.set('cam', '1');
+    location.replace('index.html?' + p.toString());
+  </script>
+</head>
+<body></body>
+</html>
